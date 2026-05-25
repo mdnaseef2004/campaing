@@ -270,17 +270,11 @@ function EditPageContent() {
       ctx.drawImage(userImage, dx, dy, dw, dh);
     } else {
       // Draw rich visual placeholder gradient
-      const placeholderGrad = ctx.createRadialGradient(
-        fx + fw / 2, fy + fh / 2, 50 * scale,
-        fx + fw / 2, fy + fh / 2, fw / 2
-      );
-      placeholderGrad.addColorStop(0, '#1e293b');
-      placeholderGrad.addColorStop(1, '#0f172a');
-      ctx.fillStyle = placeholderGrad;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
       ctx.fillRect(fx - 10, fy - 10, fw + 20, fh + 20);
 
       // Draw custom user/camera outline icon in vector style
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+      ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
       ctx.lineWidth = 4 * scale;
       ctx.beginPath();
       ctx.arc(fx + fw / 2, fy + fh / 2 - 30 * scale, 40 * scale, 0, Math.PI * 2);
@@ -291,7 +285,7 @@ function EditPageContent() {
       ctx.stroke();
 
       // Write simple tap to upload instructions
-      ctx.fillStyle = '#94a3b8';
+      ctx.fillStyle = '#64748b';
       ctx.font = `bold ${16 * scale}px sans-serif`;
       ctx.textAlign = 'center';
       ctx.fillText('TAP TO CHOOSE PHOTO', fx + fw / 2, fy + fh / 2 + 160 * scale);
@@ -471,17 +465,6 @@ function EditPageContent() {
               style={{ maxHeight: 'calc(100vh - 220px)', aspectRatio: '9/16' }}
             />
 
-            {/* Tap indicator if no image uploaded */}
-            {!userImage && (
-              <div onClick={triggerUpload} className="absolute inset-0 bg-slate-950/40 backdrop-blur-xs flex flex-col items-center justify-center gap-2 cursor-pointer pointer-events-none animate-pulse">
-                <div className="w-14 h-14 rounded-2xl bg-indigo-500/20 border border-indigo-500/40 text-white flex items-center justify-center shadow-lg">
-                  <Upload className="w-7 h-7" />
-                </div>
-                <span className="text-white font-extrabold text-sm tracking-wider uppercase drop-shadow-md">
-                  Upload Photo
-                </span>
-              </div>
-            )}
 
             {/* Quick Loading Indicator */}
             {loading && (
