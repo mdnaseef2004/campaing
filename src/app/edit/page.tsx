@@ -508,25 +508,66 @@ function EditPageContent() {
               />
             </div>
 
-            {/* Template Selector Grid */}
+            {/* Template Selector Grid — Poster Backdrop Style */}
             <div className="flex flex-col gap-2">
               <label className="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                Select Slogan Template Style
+                Select Poster Template
               </label>
-              <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
-                {allTemplates.map((template) => (
-                  <button
-                    key={template.id}
-                    onClick={() => setSelectedTemplate(template)}
-                    className={`flex-shrink-0 w-28 p-2 rounded-2xl border-2 transition-all group ${
-                      selectedTemplate.id === template.id 
-                      ? 'bg-indigo-500/10 border-indigo-500 text-indigo-600 dark:text-indigo-400 font-extrabold shadow-sm'
-                      : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-900/55'
-                    }`}
-                  >
-                    {template.name.split(' ')[0]}
-                  </button>
-                ))}
+              <div className="grid grid-cols-3 gap-3">
+                {allTemplates.map((template) => {
+                  const isActive = selectedTemplate.id === template.id;
+                  const isCustom = !!template.backgroundImage;
+                  return (
+                    <button
+                      key={template.id}
+                      onClick={() => setSelectedTemplate(template)}
+                      className={`relative flex flex-col rounded-2xl overflow-hidden border-2 transition-all duration-200 cursor-pointer group ${
+                        isActive
+                          ? 'border-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.5)] scale-[1.02]'
+                          : 'border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:scale-[1.01]'
+                      }`}
+                      title={template.name}
+                    >
+                      {/* Thumbnail */}
+                      <div className="w-full aspect-[9/16] relative overflow-hidden">
+                        {isCustom ? (
+                          <img
+                            src={template.backgroundImage}
+                            alt={template.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div
+                            className="w-full h-full"
+                            style={{
+                              background: `linear-gradient(to bottom, ${template.backgroundGradient.from}, ${template.backgroundGradient.via || template.backgroundGradient.to}, ${template.backgroundGradient.to})`
+                            }}
+                          />
+                        )}
+                        {/* Active check badge */}
+                        {isActive && (
+                          <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center shadow">
+                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                        )}
+                        {/* Custom badge */}
+                        {isCustom && (
+                          <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-purple-600/90 text-white text-[8px] font-bold uppercase tracking-wider">
+                            Custom
+                          </div>
+                        )}
+                      </div>
+                      {/* Name label */}
+                      <div className="w-full bg-slate-900/90 dark:bg-slate-950/90 px-1.5 py-1.5 text-center">
+                        <span className={`text-[9px] font-bold leading-tight block truncate ${isActive ? 'text-indigo-400' : 'text-slate-300'}`}>
+                          {template.name}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
