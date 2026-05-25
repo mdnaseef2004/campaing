@@ -1,0 +1,17 @@
+{
+  "name": "MKC Student Campaign 2026",
+  "short_name": "MKC Campaign",
+  "description": "Generate custom campaign posters, register as a student, and get referral points.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090d16",
+  "theme_color": "#818cf8",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}
