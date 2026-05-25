@@ -1054,7 +1054,7 @@ export default function AdminDashboard() {
                         : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 hover:border-emerald-400/50 hover:text-emerald-500'
                     }`}
                   >
-                    ECO
+                    WINNER
                   </button>
                   <button
                     type="button"
