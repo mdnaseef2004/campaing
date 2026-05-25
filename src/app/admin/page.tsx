@@ -119,11 +119,11 @@ export default function AdminDashboard() {
   // Sync default frame positions when base layout changes
   useEffect(() => {
     if (tempBase === 'cyber-student-2026') {
-      setFrameX(220);
-      setFrameY(560);
-      setFrameWidth(640);
-      setFrameHeight(640);
-      setFrameBorderRadius(180);
+      setFrameX(162);
+      setFrameY(630);
+      setFrameWidth(756);
+      setFrameHeight(670);
+      setFrameBorderRadius(80);
     } else if (tempBase === 'eco-champion-2026') {
       setFrameX(140);
       setFrameY(400);

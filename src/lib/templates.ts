@@ -75,13 +75,13 @@ export const CAMPAIGN_TEMPLATES: PosterTemplate[] = [
       to: '#180f4a',   // Dark purple bottom
     },
     frame: {
-      x: 220,
-      y: 560,
-      width: 640,
-      height: 640,
-      borderRadius: 180,
-      borderColor: '#ffffff', // Clean white border
-      borderWidth: 0, // Borderless to blend perfectly with pre-designed templates
+      x: 162,
+      y: 630,
+      width: 756,
+      height: 670,
+      borderRadius: 80,
+      borderColor: '#ffffff',
+      borderWidth: 0,
       shadowColor: 'transparent',
       shadowBlur: 0,
     },

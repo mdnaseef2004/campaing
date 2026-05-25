@@ -234,18 +234,20 @@ function EditPageContent() {
     const fw = t.frame.width * scale;
     const fh = t.frame.height * scale;
     const fRadius = t.frame.borderRadius * scale;
+    // Determine shape from raw template values (resolution-independent)
+    const isCircular = t.frame.borderRadius >= Math.min(t.frame.width, t.frame.height) / 2;
+
+    const drawFramePath = (ctx2: CanvasRenderingContext2D) => {
+      ctx2.beginPath();
+      if (isCircular) {
+        ctx2.arc(fx + fw / 2, fy + fh / 2, fw / 2, 0, Math.PI * 2);
+      } else {
+        ctx2.roundRect ? ctx2.roundRect(fx, fy, fw, fh, fRadius) : ctx2.rect(fx, fy, fw, fh);
+      }
+    };
 
     ctx.save();
-    
-    // Create Frame Mask Path
-    ctx.beginPath();
-    if (fRadius > 100) {
-      // Draw standard round clipping path for circular frames
-      ctx.arc(fx + fw / 2, fy + fh / 2, fw / 2, 0, Math.PI * 2);
-    } else {
-      // Draw rounded rectangle path
-      ctx.roundRect ? ctx.roundRect(fx, fy, fw, fh, fRadius) : ctx.rect(fx, fy, fw, fh);
-    }
+    drawFramePath(ctx);
     ctx.clip();
 
     // Draw user photo if provided, otherwise draw clean placeholder
@@ -269,31 +271,29 @@ function EditPageContent() {
 
       ctx.drawImage(userImage, dx, dy, dw, dh);
     } else {
-      // Transparent placeholder — background image shows through, no white fill or overlay
-      // Subtle dashed hint so user knows where to tap
-      ctx.setLineDash([8 * scale, 6 * scale]);
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
-      ctx.lineWidth = 2.5 * scale;
-      ctx.beginPath();
-      if (fRadius > 100) {
-        ctx.arc(fx + fw / 2, fy + fh / 2, fw / 2, 0, Math.PI * 2);
-      } else {
-        ctx.roundRect ? ctx.roundRect(fx, fy, fw, fh, fRadius) : ctx.rect(fx, fy, fw, fh);
+      // Transparent placeholder — the background image (or white box in template) shows through
+      // If the template has a background image, show NO overlay at all — the white box in the image guides the user
+      if (!t.backgroundImage) {
+        // Gradient-based template: show a subtle dashed outline + hint text
+        ctx.setLineDash([8 * scale, 6 * scale]);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.lineWidth = 2.5 * scale;
+        drawFramePath(ctx);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 2.5 * scale;
+        ctx.beginPath();
+        ctx.arc(fx + fw / 2, fy + fh / 2, 28 * scale, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
+        ctx.font = `600 ${14 * scale}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText('Tap to upload photo', fx + fw / 2, fy + fh / 2 + 52 * scale);
       }
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // Minimal camera icon — transparent circle outline only, no fill
-      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-      ctx.lineWidth = 2.5 * scale;
-      ctx.beginPath();
-      ctx.arc(fx + fw / 2, fy + fh / 2, 28 * scale, 0, Math.PI * 2);
-      ctx.stroke();
-
-      ctx.fillStyle = 'rgba(255,255,255,0.6)';
-      ctx.font = `600 ${14 * scale}px sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.fillText('Tap to upload photo', fx + fw / 2, fy + fh / 2 + 52 * scale);
+      // If backgroundImage: completely transparent — the white box in the design is the natural guide
     }
     ctx.restore();
 
@@ -301,17 +301,9 @@ function EditPageContent() {
     ctx.save();
     ctx.strokeStyle = t.frame.borderColor;
     ctx.lineWidth = t.frame.borderWidth * scale;
-    
-    // Add neon neon glow using canvas shadow attributes
     ctx.shadowColor = t.frame.shadowColor;
     ctx.shadowBlur = t.frame.shadowBlur * scale;
-
-    ctx.beginPath();
-    if (fRadius > 100) {
-      ctx.arc(fx + fw / 2, fy + fh / 2, fw / 2, 0, Math.PI * 2);
-    } else {
-      ctx.roundRect ? ctx.roundRect(fx, fy, fw, fh, fRadius) : ctx.rect(fx, fy, fw, fh);
-    }
+    drawFramePath(ctx);
     ctx.stroke();
     ctx.restore();
 
