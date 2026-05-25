@@ -185,7 +185,7 @@ export const CAMPAIGN_TEMPLATES: PosterTemplate[] = [
     ]
   },
   {
-    id: 'eco-champion-2026',
+    id: 'winner-2026',
     name: 'Winner',
     width: 1080,
     height: 1920,

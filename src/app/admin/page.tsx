@@ -76,7 +76,7 @@ export default function AdminDashboard() {
   const [collectName, setCollectName] = useState(true);
   const [collectPhone, setCollectPhone] = useState(true);
   const [collectCategory, setCollectCategory] = useState(true);
-  const [templateStyle, setTemplateStyle] = useState<'cyberpunk' | 'eco' | 'classic' | 'custom'>('cyberpunk');
+  const [templateStyle, setTemplateStyle] = useState<'cyberpunk' | 'winner' | 'classic' | 'custom'>('cyberpunk');
   const [customBackdropBase64, setCustomBackdropBase64] = useState<string>('');
   
   // Theme styling states
@@ -124,7 +124,7 @@ export default function AdminDashboard() {
       setFrameWidth(756);
       setFrameHeight(670);
       setFrameBorderRadius(80);
-    } else if (tempBase === 'eco-champion-2026') {
+    } else if (tempBase === 'winner-2026') {
       setFrameX(162);
       setFrameY(630);
       setFrameWidth(756);
@@ -1047,9 +1047,9 @@ export default function AdminDashboard() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setTemplateStyle('eco')}
+                    onClick={() => setTemplateStyle('winner')}
                     className={`py-3 px-2 rounded-xl text-center font-bold text-xs border transition-all duration-300 cursor-pointer ${
-                      templateStyle === 'eco'
+                      templateStyle === 'winner'
                         ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-extrabold shadow-sm scale-105'
                         : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 hover:border-emerald-400/50 hover:text-emerald-500'
                     }`}
