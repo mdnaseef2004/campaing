@@ -1299,18 +1299,18 @@ export default function AdminDashboard() {
                 {/* Drop zone */}
                 <div
                   onClick={() => templateImgInputRef.current?.click()}
-                  className="relative cursor-pointer border-2 border-dashed border-purple-400/50 hover:border-purple-400 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 transition-all min-h-[180px] overflow-hidden"
+                  className="relative cursor-pointer border-2 border-dashed border-purple-400/50 hover:border-purple-400 rounded-2xl p-6 flex flex-col items-center justify-center gap-3 transition-all h-[400px] bg-slate-100 dark:bg-slate-900/50 overflow-hidden"
                 >
                   {tempImagePreview ? (
                     <>
                       <img
                         src={tempImagePreview}
                         alt="Template preview"
-                        className="absolute inset-0 w-full h-full object-cover rounded-2xl"
+                        className="absolute inset-0 w-full h-full object-contain p-2"
                       />
-                      <div className="relative z-10 flex flex-col items-center gap-1">
-                        <CheckCircle className="w-8 h-8 text-emerald-400" />
-                        <span className="text-xs font-bold text-emerald-400">Image loaded — click to replace</span>
+                      <div className="relative z-10 flex flex-col items-center gap-1 bg-white/80 dark:bg-slate-950/80 p-3 rounded-xl shadow-sm backdrop-blur-sm">
+                        <CheckCircle className="w-6 h-6 text-emerald-500" />
+                        <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">Image loaded — click to replace</span>
                       </div>
                     </>
                   ) : (
