@@ -101,7 +101,7 @@ export default function AdminDashboard() {
 
   // Custom Template Builder states
   const [tempName, setTempName] = useState('');
-  const [tempBase, setTempBase] = useState<'cyber-student-2026'|'eco-champion-2026'|'gold-academic-2026'>('cyber-student-2026');
+  const [tempBase, setTempBase] = useState<'cyber-student-2026'|'winner-2026'|'gold-academic-2026'>('cyber-student-2026');
   const [tempImageBase64, setTempImageBase64] = useState<string>('');
   const [tempImagePreview, setTempImagePreview] = useState<string>('');
   const [templateUploadError, setTemplateUploadError] = useState('');
@@ -1227,7 +1227,7 @@ export default function AdminDashboard() {
                   className="px-4 py-3 rounded-xl glass-input text-sm font-semibold cursor-pointer"
                 >
                   <option value="cyber-student-2026">Layout A — Square frame, center-bottom name</option>
-                  <option value="eco-champion-2026">Layout B — Oval frame, center-bottom name</option>
+                  <option value="winner-2026">Layout B — Oval frame, center-bottom name</option>
                   <option value="gold-academic-2026">Layout C — Sharp-corner frame, formal name</option>
                 </select>
               </div>
