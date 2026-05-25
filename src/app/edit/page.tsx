@@ -269,26 +269,31 @@ function EditPageContent() {
 
       ctx.drawImage(userImage, dx, dy, dw, dh);
     } else {
-      // Draw rich visual placeholder gradient
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.fillRect(fx - 10, fy - 10, fw + 20, fh + 20);
-
-      // Draw custom user/camera outline icon in vector style
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-      ctx.lineWidth = 4 * scale;
+      // Transparent placeholder — background image shows through, no white fill or overlay
+      // Subtle dashed hint so user knows where to tap
+      ctx.setLineDash([8 * scale, 6 * scale]);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.lineWidth = 2.5 * scale;
       ctx.beginPath();
-      ctx.arc(fx + fw / 2, fy + fh / 2 - 30 * scale, 40 * scale, 0, Math.PI * 2);
+      if (fRadius > 100) {
+        ctx.arc(fx + fw / 2, fy + fh / 2, fw / 2, 0, Math.PI * 2);
+      } else {
+        ctx.roundRect ? ctx.roundRect(fx, fy, fw, fh, fRadius) : ctx.rect(fx, fy, fw, fh);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Minimal camera icon — transparent circle outline only, no fill
+      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+      ctx.lineWidth = 2.5 * scale;
+      ctx.beginPath();
+      ctx.arc(fx + fw / 2, fy + fh / 2, 28 * scale, 0, Math.PI * 2);
       ctx.stroke();
 
-      ctx.beginPath();
-      ctx.arc(fx + fw / 2, fy + fh / 2 + 100 * scale, 80 * scale, Math.PI, 0);
-      ctx.stroke();
-
-      // Write simple tap to upload instructions
-      ctx.fillStyle = '#64748b';
-      ctx.font = `bold ${16 * scale}px sans-serif`;
+      ctx.fillStyle = 'rgba(255,255,255,0.6)';
+      ctx.font = `600 ${14 * scale}px sans-serif`;
       ctx.textAlign = 'center';
-      ctx.fillText('TAP TO CHOOSE PHOTO', fx + fw / 2, fy + fh / 2 + 160 * scale);
+      ctx.fillText('Tap to upload photo', fx + fw / 2, fy + fh / 2 + 52 * scale);
     }
     ctx.restore();
 
