@@ -186,7 +186,7 @@ export const CAMPAIGN_TEMPLATES: PosterTemplate[] = [
   },
   {
     id: 'eco-champion-2026',
-    name: 'Eco-Modern Scholar',
+    name: 'Winner',
     width: 1080,
     height: 1920,
     backgroundGradient: {
@@ -195,15 +195,15 @@ export const CAMPAIGN_TEMPLATES: PosterTemplate[] = [
       to: '#0284c7',   // Ocean Blue splash
     },
     frame: {
-      x: 140,
-      y: 400,
-      width: 800,
-      height: 900,
-      borderRadius: 400, // Round oval frame for stylish look!
-      borderColor: '#10b981', // Vibrant emerald
-      borderWidth: 10,
-      shadowColor: 'rgba(16, 185, 129, 0.4)',
-      shadowBlur: 35,
+      x: 162,
+      y: 630,
+      width: 756,
+      height: 670,
+      borderRadius: 80,
+      borderColor: '#ffffff',
+      borderWidth: 0,
+      shadowColor: 'transparent',
+      shadowBlur: 0,
     },
     badge: {
       text: 'LEAD THE FUTURE',

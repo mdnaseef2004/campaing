@@ -125,11 +125,11 @@ export default function AdminDashboard() {
       setFrameHeight(670);
       setFrameBorderRadius(80);
     } else if (tempBase === 'eco-champion-2026') {
-      setFrameX(140);
-      setFrameY(400);
-      setFrameWidth(800);
-      setFrameHeight(900);
-      setFrameBorderRadius(400);
+      setFrameX(162);
+      setFrameY(630);
+      setFrameWidth(756);
+      setFrameHeight(670);
+      setFrameBorderRadius(80);
     } else if (tempBase === 'gold-academic-2026') {
       setFrameX(140);
       setFrameY(400);
