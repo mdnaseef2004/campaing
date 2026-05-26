@@ -43,6 +43,7 @@ function CampaignEditContent() {
   const [student, setStudent] = useState<StudentSubmission | null>(null);
   const [displayName, setDisplayName] = useState('');
   const [campaignBgImage, setCampaignBgImage] = useState<HTMLImageElement | null>(null);
+  const [templateBgImage, setTemplateBgImage] = useState<HTMLImageElement | null>(null);
   const [campaignError, setCampaignError] = useState(false);
 
   // Preset Template states
@@ -91,6 +92,7 @@ function CampaignEditContent() {
         if (camp.templateStyle === 'custom') {
           if (camp.templateUrl) {
             const bgImg = new Image();
+            bgImg.crossOrigin = 'anonymous';
             bgImg.onload = () => {
               setCampaignBgImage(bgImg);
               setLoading(false);
@@ -137,10 +139,23 @@ function CampaignEditContent() {
     loadStudioData();
   }, [id, searchParams]);
 
+  useEffect(() => {
+    if (selectedTemplate?.backgroundImage) {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        setTemplateBgImage(img);
+      };
+      img.src = selectedTemplate.backgroundImage;
+    } else {
+      setTemplateBgImage(null);
+    }
+  }, [selectedTemplate?.backgroundImage]);
+
   // Redraw canvas on dependencies change
   useEffect(() => {
     drawWorkspace();
-  }, [campaign, selectedTemplate, campaignBgImage, userImage, zoom, offsetX, offsetY, displayName, student]);
+  }, [campaign, selectedTemplate, campaignBgImage, templateBgImage, userImage, zoom, offsetX, offsetY, displayName, student]);
 
   const toggleTheme = () => {
     if (isDark) {
@@ -207,14 +222,18 @@ function CampaignEditContent() {
       ctx.drawImage(campaignBgImage, 0, 0, drawCanvas.width, drawCanvas.height);
     } else if (selectedTemplate) {
       const t = selectedTemplate;
-      const gradient = ctx.createLinearGradient(0, 0, 0, drawCanvas.height);
-      gradient.addColorStop(0, t.backgroundGradient.from);
-      if (t.backgroundGradient.via) {
-        gradient.addColorStop(0.5, t.backgroundGradient.via);
+      if (t.backgroundImage && templateBgImage) {
+        ctx.drawImage(templateBgImage, 0, 0, drawCanvas.width, drawCanvas.height);
+      } else {
+        const gradient = ctx.createLinearGradient(0, 0, 0, drawCanvas.height);
+        gradient.addColorStop(0, t.backgroundGradient.from);
+        if (t.backgroundGradient.via) {
+          gradient.addColorStop(0.5, t.backgroundGradient.via);
+        }
+        gradient.addColorStop(1, t.backgroundGradient.to);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
       }
-      gradient.addColorStop(1, t.backgroundGradient.to);
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
 
       // Shapes
       t.shapes.forEach(shape => {

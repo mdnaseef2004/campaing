@@ -44,6 +44,7 @@ function EditPageContent() {
   useEffect(() => {
     if (selectedTemplate?.backgroundImage) {
       const img = new Image();
+      img.crossOrigin = 'anonymous';
       img.onload = () => {
         setTemplateImage(img);
       };
