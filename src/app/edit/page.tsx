@@ -38,6 +38,7 @@ function EditPageContent() {
   // Selected Template
   const [allTemplates, setAllTemplates] = useState<PosterTemplate[]>(CAMPAIGN_TEMPLATES);
   const [selectedTemplate, setSelectedTemplate] = useState<PosterTemplate>(CAMPAIGN_TEMPLATES[0]);
+  const [showShapeModal, setShowShapeModal] = useState(false);
   const [templateImage, setTemplateImage] = useState<HTMLImageElement | null>(null);
 
   useEffect(() => {
@@ -271,9 +272,29 @@ function EditPageContent() {
 
       ctx.drawImage(userImage, dx, dy, dw, dh);
     } else {
-      // Transparent placeholder — the background image (or white box in template) shows through
-      // If the template has a background image, show NO overlay at all — the white box in the image guides the user
-      if (!t.backgroundImage) {
+      if (t.backgroundImage) {
+        // Custom backdrop: draw a clean white circle as the photo guide
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
+        drawFramePath(ctx);
+        ctx.fill();
+
+        // Person silhouette icon (head)
+        ctx.fillStyle = 'rgba(180, 180, 200, 0.7)';
+        ctx.beginPath();
+        ctx.arc(fx + fw / 2, fy + fh / 2 - 38 * scale, 42 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Person silhouette icon (body arc)
+        ctx.beginPath();
+        ctx.arc(fx + fw / 2, fy + fh / 2 + 120 * scale, 88 * scale, Math.PI, 0);
+        ctx.fill();
+
+        // Hint text
+        ctx.fillStyle = 'rgba(100, 100, 130, 0.9)';
+        ctx.font = `600 ${15 * scale}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText('Tap to upload photo', fx + fw / 2, fy + fh / 2 + 175 * scale);
+      } else {
         // Gradient-based template: show a subtle dashed outline + hint text
         ctx.setLineDash([8 * scale, 6 * scale]);
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
@@ -293,7 +314,6 @@ function EditPageContent() {
         ctx.textAlign = 'center';
         ctx.fillText('Tap to upload photo', fx + fw / 2, fy + fh / 2 + 52 * scale);
       }
-      // If backgroundImage: completely transparent — the white box in the design is the natural guide
     }
     ctx.restore();
 
@@ -308,31 +328,38 @@ function EditPageContent() {
     ctx.restore();
 
     // 5. Draw Badge Header Text
-    ctx.save();
-    ctx.fillStyle = t.badge.fillColor;
-    const bX = t.badge.x * scale;
-    const bY = t.badge.y * scale;
-    const bFS = t.badge.fontSize * scale;
-    const bPX = t.badge.paddingX * scale;
-    const bPY = t.badge.paddingY * scale;
-    
-    ctx.font = `bold ${bFS}px sans-serif`;
-    const textWidth = ctx.measureText(t.badge.text).width;
-    
-    // Draw badge capsule pill
-    ctx.beginPath();
-    ctx.roundRect ? ctx.roundRect(bX - textWidth / 2 - bPX, bY - bFS / 2 - bPY, textWidth + bPX * 2, bFS + bPY * 2, t.badge.borderRadius * scale) : ctx.rect(bX - textWidth / 2 - bPX, bY - bFS / 2 - bPY, textWidth + bPX * 2, bFS + bPY * 2);
-    ctx.fill();
+    if (t.badge && t.badge.text) {
+      ctx.save();
+      ctx.fillStyle = t.badge.fillColor;
+      const bX = t.badge.x * scale;
+      const bY = t.badge.y * scale;
+      const bFS = t.badge.fontSize * scale;
+      const bPX = t.badge.paddingX * scale;
+      const bPY = t.badge.paddingY * scale;
+      
+      ctx.font = `bold ${bFS}px sans-serif`;
+      const textWidth = ctx.measureText(t.badge.text).width;
+      
+      // Draw badge capsule pill
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(bX - textWidth / 2 - bPX, bY - bFS / 2 - bPY, textWidth + bPX * 2, bFS + bPY * 2, t.badge.borderRadius * scale) : ctx.rect(bX - textWidth / 2 - bPX, bY - bFS / 2 - bPY, textWidth + bPX * 2, bFS + bPY * 2);
+      ctx.fill();
 
-    // Draw badge text
-    ctx.fillStyle = t.badge.textColor;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(t.badge.text, bX, bY + 1 * scale);
-    ctx.restore();
+      // Draw badge text
+      ctx.fillStyle = t.badge.textColor;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(t.badge.text, bX, bY + 1 * scale);
+      ctx.restore();
+    }
 
     // 6. Draw Typography Text Elements (Logo, Slogans, Name, Student ID)
-    t.textElements.forEach(el => {
+    const isCustom = !!t.backgroundImage;
+    const filteredTextElements = isCustom
+      ? t.textElements.filter(el => el.type === 'name')
+      : t.textElements;
+
+    filteredTextElements.forEach(el => {
       ctx.save();
       ctx.fillStyle = el.textColor;
       ctx.textAlign = el.align;
@@ -508,66 +535,168 @@ function EditPageContent() {
               />
             </div>
 
-            {/* Template Selector Grid — Poster Backdrop Style */}
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
-                Select Poster Template
+            {/* Photo Area Settings */}
+            <div className="border-t border-slate-200/50 dark:border-slate-800/60 pt-4 flex flex-col gap-4">
+              <label className="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                <FileImage className="w-4 h-4 text-indigo-500" /> Photo Area Settings
               </label>
-              <div className="grid grid-cols-3 gap-3">
-                {allTemplates.map((template) => {
-                  const isActive = selectedTemplate.id === template.id;
-                  const isCustom = !!template.backgroundImage;
-                  return (
+              <div className="flex flex-col gap-2">
                     <button
-                      key={template.id}
-                      onClick={() => setSelectedTemplate(template)}
-                      className={`relative flex flex-col rounded-2xl overflow-hidden border-2 transition-all duration-200 cursor-pointer group ${
-                        isActive
-                          ? 'border-indigo-500 shadow-[0_0_12px_rgba(99,102,241,0.5)] scale-[1.02]'
-                          : 'border-slate-200 dark:border-slate-700 hover:border-indigo-400 hover:scale-[1.01]'
-                      }`}
-                      title={template.name}
+                      type="button"
+                      onClick={() => setShowShapeModal(true)}
+                      className="flex-1 py-2 px-3 text-xs font-bold bg-indigo-100 dark:bg-indigo-900 text-indigo-700 rounded"
                     >
-                      {/* Thumbnail */}
-                      <div className="w-full aspect-[9/16] relative overflow-hidden">
-                        {isCustom ? (
-                          <img
-                            src={template.backgroundImage}
-                            alt={template.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div
-                            className="w-full h-full"
-                            style={{
-                              background: `linear-gradient(to bottom, ${template.backgroundGradient.from}, ${template.backgroundGradient.via || template.backgroundGradient.to}, ${template.backgroundGradient.to})`
-                            }}
-                          />
-                        )}
-                        {/* Active check badge */}
-                        {isActive && (
-                          <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center shadow">
-                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                            </svg>
-                          </div>
-                        )}
-                        {/* Custom badge */}
-                        {isCustom && (
-                          <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-md bg-purple-600/90 text-white text-[8px] font-bold uppercase tracking-wider">
-                            Custom
-                          </div>
-                        )}
-                      </div>
-                      {/* Name label */}
-                      <div className="w-full bg-slate-900/90 dark:bg-slate-950/90 px-1.5 py-1.5 text-center">
-                        <span className={`text-[9px] font-bold leading-tight block truncate ${isActive ? 'text-indigo-400' : 'text-slate-300'}`}>
-                          {template.name}
-                        </span>
-                      </div>
+                      Change Photo Shape
                     </button>
-                  );
-                })}
+                    {/* Shape Selection Modal */}
+                    {showShapeModal && (
+                      <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                        <div className="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg max-w-sm w-full">
+                          <h3 className="text-lg font-bold mb-4 text-slate-900 dark:text-slate-100">Select Photo Shape</h3>
+                          <div className="grid grid-cols-3 gap-2">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSelectedTemplate(prev => ({
+                                  ...prev,
+                                  frame: { ...prev.frame, borderRadius: 0 }
+                                }));
+                                setShowShapeModal(false);
+                              }}
+                              className="py-2 px-3 text-sm font-medium bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded"
+                            >
+                              Rectangle
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSelectedTemplate(prev => ({
+                                  ...prev,
+                                  frame: {
+                                    ...prev.frame,
+                                    width: Math.max(prev.frame.width, prev.frame.height),
+                                    height: Math.max(prev.frame.width, prev.frame.height),
+                                    borderRadius: 0
+                                  }
+                                }));
+                                setShowShapeModal(false);
+                              }}
+                              className="py-2 px-3 text-sm font-medium bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded"
+                            >
+                              Square
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSelectedTemplate(prev => ({
+                                  ...prev,
+                                  frame: { ...prev.frame, borderRadius: Math.min(prev.frame.width, prev.frame.height) / 2 }
+                                }));
+                                setShowShapeModal(false);
+                              }}
+                              className="py-2 px-3 text-sm font-medium bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded"
+                            >
+                              Circle
+                            </button>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setShowShapeModal(false)}
+                            className="mt-4 text-sm text-slate-500 dark:text-slate-400 hover:underline"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                <span className="text-[10px] text-slate-400 italic">
+                  Click the blue zone on the poster to move or resize the photo area.
+                </span>
+              </div>
+            </div>
+
+            {/* Name Area Settings */}
+            <div className="border-t border-slate-200/50 dark:border-slate-800/60 pt-4 flex flex-col gap-4">
+              <label className="text-xs font-extrabold text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-2">
+                <span className="text-indigo-500 text-lg leading-none font-serif font-medium">T</span> Name Area Settings
+              </label>
+              
+              <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">Font Family</span>
+                  <select
+                    value={selectedTemplate.textElements.find(el => el.type === 'name')?.fontFamily || 'Outfit, sans-serif'}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setSelectedTemplate(prev => ({
+                        ...prev,
+                        textElements: prev.textElements.map(el => el.type === 'name' ? { ...el, fontFamily: val } : el)
+                      }));
+                    }}
+                    className="px-3 py-2 rounded-xl glass-input text-xs font-bold"
+                  >
+                    <option value="'Playfair Display', Georgia, serif">Playfair Display</option>
+                    <option value="Outfit, sans-serif">Outfit</option>
+                    <option value="'Pacifico', cursive">Pacifico</option>
+                    <option value="Inter, sans-serif">Inter</option>
+                  </select>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400">
+                    <span>Font Size</span>
+                    <span>{selectedTemplate.textElements.find(el => el.type === 'name')?.fontSize || 80}px</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="30"
+                    max="150"
+                    step="1"
+                    value={selectedTemplate.textElements.find(el => el.type === 'name')?.fontSize || 80}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value);
+                      setSelectedTemplate(prev => ({
+                        ...prev,
+                        textElements: prev.textElements.map(el => el.type === 'name' ? { ...el, fontSize: val } : el)
+                      }));
+                    }}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">Text Color</span>
+                  <div className="flex gap-2">
+                    <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-sm">
+                      <input
+                        type="color"
+                        value={selectedTemplate.textElements.find(el => el.type === 'name')?.textColor || '#ffffff'}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setSelectedTemplate(prev => ({
+                            ...prev,
+                            textElements: prev.textElements.map(el => el.type === 'name' ? { ...el, textColor: val } : el)
+                          }));
+                        }}
+                        className="absolute inset-[-10px] w-16 h-16 cursor-pointer"
+                      />
+                    </div>
+                    <input 
+                      type="text" 
+                      value={selectedTemplate.textElements.find(el => el.type === 'name')?.textColor || '#ffffff'}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setSelectedTemplate(prev => ({
+                          ...prev,
+                          textElements: prev.textElements.map(el => el.type === 'name' ? { ...el, textColor: val } : el)
+                        }));
+                      }}
+                      className="flex-1 px-3 py-2 rounded-xl glass-input text-xs font-mono uppercase"
+                    />
+                  </div>
+                </div>
+                <span className="text-[10px] text-slate-400 italic mt-1">
+                  Click the text on the poster to move or adjust
+                </span>
               </div>
             </div>
 

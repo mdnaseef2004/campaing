@@ -152,7 +152,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="w-full glass-panel border-t border-slate-200/50 dark:border-slate-800/50 py-6 px-4 text-center mt-auto">
         <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold tracking-wider">
-          © 2026 MKC CAMPAIGN MANAGER HUB • POWERED BY ANTIGRAVITY.
+          © 2026 MKC CAMPAIGN MANAGER HUB • CREATED BY MOHAMED NASEEF.
         </p>
       </footer>
     </div>

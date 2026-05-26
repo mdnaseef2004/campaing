@@ -9,7 +9,7 @@ export interface Campaign {
   collectName: boolean;
   collectPhone: boolean;
   collectCategory: boolean;
-  templateStyle: 'cyberpunk' | 'eco' | 'classic' | 'custom';
+  templateStyle: 'cyberpunk' | 'eco' | 'winner' | 'classic' | 'custom';
   templateUrl?: string; // Base64 uploaded image if templateStyle is 'custom' or Supabase Storage URL
   googleSheetsUrl?: string; // Google Sheets Apps Script Web App URL
   buttonText: string; // Customized submit button text

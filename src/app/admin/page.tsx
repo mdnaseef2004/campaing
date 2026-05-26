@@ -76,7 +76,7 @@ export default function AdminDashboard() {
   const [collectName, setCollectName] = useState(true);
   const [collectPhone, setCollectPhone] = useState(true);
   const [collectCategory, setCollectCategory] = useState(true);
-  const [templateStyle, setTemplateStyle] = useState<'cyberpunk' | 'winner' | 'classic' | 'custom'>('cyberpunk');
+  const [templateStyle, setTemplateStyle] = useState<'cyberpunk' | 'eco' | 'winner' | 'classic' | 'custom'>('custom');
   const [customBackdropBase64, setCustomBackdropBase64] = useState<string>('');
   
   // Theme styling states
@@ -119,11 +119,11 @@ export default function AdminDashboard() {
   // Sync default frame positions when base layout changes
   useEffect(() => {
     if (tempBase === 'cyber-student-2026') {
-      setFrameX(162);
-      setFrameY(630);
-      setFrameWidth(756);
-      setFrameHeight(670);
-      setFrameBorderRadius(80);
+      setFrameX(190);
+      setFrameY(615);
+      setFrameWidth(700);
+      setFrameHeight(700);
+      setFrameBorderRadius(350);
     } else if (tempBase === 'winner-2026') {
       setFrameX(162);
       setFrameY(630);
@@ -465,7 +465,7 @@ export default function AdminDashboard() {
       setCollectName(true);
       setCollectPhone(true);
       setCollectCategory(true);
-      setTemplateStyle('cyberpunk');
+      setTemplateStyle('custom');
       setCustomBackdropBase64('');
       setPrimaryColor('#6366f1');
       setGradientStyle('from-indigo-500 via-purple-500 to-rose-500');
@@ -696,7 +696,7 @@ export default function AdminDashboard() {
                 setCollectName(true);
                 setCollectPhone(true);
                 setCollectCategory(true);
-                setTemplateStyle('cyberpunk');
+                setTemplateStyle('custom');
                 setCustomBackdropBase64('');
                 setPrimaryColor('#6366f1');
                 setGradientStyle('from-indigo-500 via-purple-500 to-rose-500');
@@ -1033,40 +1033,7 @@ export default function AdminDashboard() {
                   Poster Backdrop template style
                 </label>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setTemplateStyle('cyberpunk')}
-                    className={`py-3 px-2 rounded-xl text-center font-bold text-xs border transition-all duration-300 cursor-pointer ${
-                      templateStyle === 'cyberpunk'
-                        ? 'bg-indigo-500/10 border-indigo-500 text-indigo-600 dark:text-indigo-400 font-extrabold shadow-sm scale-105'
-                        : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 hover:border-indigo-400/50 hover:text-indigo-500'
-                    }`}
-                  >
-                    SUCCESS STORY
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTemplateStyle('winner')}
-                    className={`py-3 px-2 rounded-xl text-center font-bold text-xs border transition-all duration-300 cursor-pointer ${
-                      templateStyle === 'winner'
-                        ? 'bg-emerald-500/10 border-emerald-500 text-emerald-600 dark:text-emerald-400 font-extrabold shadow-sm scale-105'
-                        : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 hover:border-emerald-400/50 hover:text-emerald-500'
-                    }`}
-                  >
-                    WINNER
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setTemplateStyle('classic')}
-                    className={`py-3 px-2 rounded-xl text-center font-bold text-xs border transition-all duration-300 cursor-pointer ${
-                      templateStyle === 'classic'
-                        ? 'bg-amber-500/10 border-amber-500 text-amber-600 dark:text-amber-400 font-extrabold shadow-sm scale-105'
-                        : 'bg-transparent border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-amber-50 dark:hover:bg-amber-950/30 hover:border-amber-400/50 hover:text-amber-500'
-                    }`}
-                  >
-                    CLASSIC
-                  </button>
+                <div className="grid grid-cols-1 gap-2">
                   <button
                     type="button"
                     onClick={() => setTemplateStyle('custom')}
@@ -1115,6 +1082,76 @@ export default function AdminDashboard() {
                         Upload portrait backdrop (1080x1920 recommended, max 2MB)
                       </span>
                     )}
+                  </div>
+                )}
+
+                {/* Photo Shape Selector – shown when Custom is chosen */}
+                {templateStyle === 'custom' && (
+                  <div className="mt-3 flex flex-col gap-2">
+                    <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                      Photo Frame Shape
+                    </span>
+                    <div className="grid grid-cols-3 gap-2">
+                      {/* Rectangle */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFrameWidth(700);
+                          setFrameHeight(900);
+                          setFrameBorderRadius(0);
+                        }}
+                        className={`flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl border-2 font-bold text-xs transition-all cursor-pointer ${
+                          frameBorderRadius === 0 && frameHeight > frameWidth
+                            ? 'border-fuchsia-500 bg-fuchsia-50 dark:bg-fuchsia-950/30 text-fuchsia-600 dark:text-fuchsia-400 scale-105 shadow'
+                            : 'border-slate-200 dark:border-slate-800 text-slate-500 hover:border-fuchsia-400/50 hover:text-fuchsia-500'
+                        }`}
+                      >
+                        {/* Rectangle icon */}
+                        <span className="w-8 h-10 rounded border-2 border-current inline-block" />
+                        Rectangle
+                      </button>
+
+                      {/* Square */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFrameWidth(700);
+                          setFrameHeight(700);
+                          setFrameBorderRadius(0);
+                        }}
+                        className={`flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl border-2 font-bold text-xs transition-all cursor-pointer ${
+                          frameBorderRadius === 0 && frameWidth === frameHeight
+                            ? 'border-fuchsia-500 bg-fuchsia-50 dark:bg-fuchsia-950/30 text-fuchsia-600 dark:text-fuchsia-400 scale-105 shadow'
+                            : 'border-slate-200 dark:border-slate-800 text-slate-500 hover:border-fuchsia-400/50 hover:text-fuchsia-500'
+                        }`}
+                      >
+                        {/* Square icon */}
+                        <span className="w-8 h-8 rounded border-2 border-current inline-block" />
+                        Square
+                      </button>
+
+                      {/* Circle */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setFrameWidth(700);
+                          setFrameHeight(700);
+                          setFrameBorderRadius(350);
+                        }}
+                        className={`flex flex-col items-center justify-center gap-1.5 py-3 rounded-xl border-2 font-bold text-xs transition-all cursor-pointer ${
+                          frameBorderRadius >= 350
+                            ? 'border-fuchsia-500 bg-fuchsia-50 dark:bg-fuchsia-950/30 text-fuchsia-600 dark:text-fuchsia-400 scale-105 shadow'
+                            : 'border-slate-200 dark:border-slate-800 text-slate-500 hover:border-fuchsia-400/50 hover:text-fuchsia-500'
+                        }`}
+                      >
+                        {/* Circle icon */}
+                        <span className="w-8 h-8 rounded-full border-2 border-current inline-block" />
+                        Circle
+                      </button>
+                    </div>
+                    <span className="text-[10px] text-slate-400 italic">
+                      This controls the shape of the photo area where students upload their image.
+                    </span>
                   </div>
                 )}
               </div>
@@ -1234,9 +1271,34 @@ export default function AdminDashboard() {
 
               {/* Photo Box Editing Option */}
               <div className="border-t border-slate-200/50 dark:border-slate-800/60 pt-4 flex flex-col gap-3">
-                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
-                  Photo Upload Frame Settings (1080x1920 scale)
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider block">
+                    Photo Upload Frame Settings (1080x1920 scale)
+                  </label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() => { setFrameWidth(700); setFrameHeight(700); setFrameBorderRadius(0); }}
+                      className="px-2 py-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 rounded text-[10px] font-bold text-slate-700 dark:text-slate-300 transition-colors"
+                    >
+                      Square
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setFrameWidth(700); setFrameHeight(900); setFrameBorderRadius(0); }}
+                      className="px-2 py-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 rounded text-[10px] font-bold text-slate-700 dark:text-slate-300 transition-colors"
+                    >
+                      Rectangle
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setFrameWidth(700); setFrameHeight(700); setFrameBorderRadius(350); }}
+                      className="px-2 py-1 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 rounded text-[10px] font-bold text-slate-700 dark:text-slate-300 transition-colors"
+                    >
+                      Circle
+                    </button>
+                  </div>
+                </div>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                   <div className="flex flex-col gap-1">
                     <span className="text-[10px] font-bold text-slate-500">X Position (px)</span>

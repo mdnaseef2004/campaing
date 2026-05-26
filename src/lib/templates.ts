@@ -69,24 +69,25 @@ export const CAMPAIGN_TEMPLATES: PosterTemplate[] = [
     name: 'Finally Made It Success Story',
     width: 1080,
     height: 1920,
+    backgroundImage: '/finally-made-it.jpg',
     backgroundGradient: {
-      from: '#090826', // Deep indigo-blue space
-      via: '#110c3b',  // Starry space center
-      to: '#180f4a',   // Dark purple bottom
+      from: '#090826',
+      via: '#110c3b',
+      to: '#180f4a',
     },
     frame: {
-      x: 162,
-      y: 630,
-      width: 756,
-      height: 670,
-      borderRadius: 80,
-      borderColor: '#ffffff',
+      x: 170,
+      y: 480,
+      width: 740,
+      height: 740,
+      borderRadius: 370,
+      borderColor: 'transparent',
       borderWidth: 0,
       shadowColor: 'transparent',
       shadowBlur: 0,
     },
     badge: {
-      text: 'SUCCESS STORY',
+      text: '',
       x: 540,
       y: 1680,
       fontSize: 24,
@@ -99,90 +100,18 @@ export const CAMPAIGN_TEMPLATES: PosterTemplate[] = [
     },
     textElements: [
       {
-        type: 'logo-text',
-        text: 'finally',
-        x: 540,
-        y: 180,
-        fontSize: 120,
-        fontWeight: 'normal',
-        fontFamily: "'Playfair Display', Georgia, serif",
-        textColor: '#ffffff',
-        align: 'center',
-      },
-      {
-        type: 'logo-text',
-        text: 'made It',
-        x: 540,
-        y: 280,
-        fontSize: 110,
-        fontWeight: 'bold',
-        fontFamily: "'Playfair Display', Georgia, serif",
-        textColor: '#b4b6f9',
-        align: 'center',
-      },
-      {
-        type: 'slogan',
-        text: 'Success Story',
-        x: 540,
-        y: 340,
-        fontSize: 85,
-        fontWeight: 'normal',
-        fontFamily: "'Pacifico', cursive",
-        textColor: '#f59e0b', // Warm Gold
-        align: 'center',
-        shadow: {
-          color: 'rgba(245, 158, 11, 0.4)',
-          blur: 15,
-          offsetX: 0,
-          offsetY: 0,
-        }
-      },
-      {
         type: 'name',
         text: '{NAME}',
         x: 540,
-        y: 1330,
+        y: 1320,
         fontSize: 84,
         fontWeight: 'bold',
         fontFamily: 'Outfit, sans-serif',
         textColor: '#ffffff',
         align: 'center',
-      },
-      {
-        type: 'id-tag',
-        text: 'ID: {ID} | {CATEGORY}',
-        x: 540,
-        y: 1450,
-        fontSize: 30,
-        fontWeight: '600',
-        fontFamily: 'monospace',
-        textColor: '#b4b6f9',
-        align: 'center',
-      },
-      {
-        type: 'slogan',
-        text: '{SLOGAN}',
-        x: 540,
-        y: 1550,
-        fontSize: 32,
-        fontWeight: '500',
-        fontFamily: 'Outfit, sans-serif',
-        textColor: '#94a3b8',
-        align: 'center',
       }
     ],
-    shapes: [
-      // Ambient purple glow
-      { type: 'circle', x: 540, y: 300, size: 500, fillColor: '#818cf8', opacity: 0.15 },
-      // Glowing stars (using white/light-blue circles with shadow)
-      { type: 'circle', x: 70, y: 140, size: 14, fillColor: '#ffffff', opacity: 0.9, shadowColor: '#c3c5ff', shadowBlur: 20 } as any,
-      { type: 'circle', x: 930, y: 130, size: 16, fillColor: '#ffffff', opacity: 0.9, shadowColor: '#c3c5ff', shadowBlur: 20 } as any,
-      { type: 'circle', x: 880, y: 1610, size: 16, fillColor: '#ffffff', opacity: 0.9, shadowColor: '#c3c5ff', shadowBlur: 20 } as any,
-      { type: 'circle', x: 120, y: 1720, size: 12, fillColor: '#ffffff', opacity: 0.9, shadowColor: '#c3c5ff', shadowBlur: 20 } as any,
-      { type: 'circle', x: 50, y: 1380, size: 8, fillColor: '#ffffff', opacity: 0.7, shadowColor: '#c3c5ff', shadowBlur: 10 } as any,
-      { type: 'circle', x: 1030, y: 1380, size: 8, fillColor: '#ffffff', opacity: 0.7, shadowColor: '#c3c5ff', shadowBlur: 10 } as any,
-      { type: 'circle', x: 540, y: 1820, size: 12, fillColor: '#ffffff', opacity: 0.8, shadowColor: '#c3c5ff', shadowBlur: 15 } as any,
-    ]
+    shapes: []
   },
   {
     id: 'winner-2026',
@@ -268,17 +197,6 @@ export const CAMPAIGN_TEMPLATES: PosterTemplate[] = [
         textColor: '#a7f3d0',
         align: 'center',
       },
-      {
-        type: 'id-tag',
-        text: 'REG NO: {ID} | {CATEGORY}',
-        x: 540,
-        y: 1730,
-        fontSize: 28,
-        fontWeight: '600',
-        fontFamily: 'monospace',
-        textColor: '#38bdf8',
-        align: 'center',
-      }
     ],
     shapes: [
       { type: 'circle', x: 950, y: 180, size: 300, fillColor: '#059669', opacity: 0.2 },
@@ -371,17 +289,6 @@ export const CAMPAIGN_TEMPLATES: PosterTemplate[] = [
         textColor: '#94a3b8',
         align: 'center',
       },
-      {
-        type: 'id-tag',
-        text: 'REG NO: {ID} | {CATEGORY}',
-        x: 540,
-        y: 1730,
-        fontSize: 28,
-        fontWeight: '600',
-        fontFamily: 'monospace',
-        textColor: '#fbbf24',
-        align: 'center',
-      }
     ],
     shapes: [
       { type: 'circle', x: 100, y: 150, size: 200, fillColor: '#fbbf24', opacity: 0.1 },

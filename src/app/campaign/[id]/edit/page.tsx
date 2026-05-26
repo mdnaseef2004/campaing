@@ -259,11 +259,11 @@ function CampaignEditContent() {
 
     // Bounding Frame details
     const frame = selectedTemplate ? selectedTemplate.frame : {
-      x: 140,
-      y: 400,
-      width: 800,
-      height: 900,
-      borderRadius: 30,
+      x: 190,
+      y: 615,
+      width: 700,
+      height: 700,
+      borderRadius: 350,
       borderColor: '#ffffff',
       borderWidth: 8,
       shadowColor: 'rgba(255, 255, 255, 0.3)',
@@ -302,23 +302,28 @@ function CampaignEditContent() {
 
       ctx.drawImage(userImage, dx, dy, dw, dh);
     } else {
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-      ctx.fillRect(fx - 10, fy - 10, fw + 20, fh + 20);
-
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
-      ctx.lineWidth = 4 * scale;
+      // White circle placeholder with person silhouette
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.92)';
       ctx.beginPath();
-      ctx.arc(fx + fw / 2, fy + fh / 2 - 30 * scale, 40 * scale, 0, Math.PI * 2);
-      ctx.stroke();
+      ctx.arc(fx + fw / 2, fy + fh / 2, fw / 2, 0, Math.PI * 2);
+      ctx.fill();
 
+      // Person head
+      ctx.fillStyle = 'rgba(180, 180, 200, 0.7)';
       ctx.beginPath();
-      ctx.arc(fx + fw / 2, fy + fh / 2 + 100 * scale, 80 * scale, Math.PI, 0);
-      ctx.stroke();
+      ctx.arc(fx + fw / 2, fy + fh / 2 - 38 * scale, 42 * scale, 0, Math.PI * 2);
+      ctx.fill();
 
-      ctx.fillStyle = '#64748b';
-      ctx.font = `bold ${16 * scale}px sans-serif`;
+      // Person body arc
+      ctx.beginPath();
+      ctx.arc(fx + fw / 2, fy + fh / 2 + 120 * scale, 88 * scale, Math.PI, 0);
+      ctx.fill();
+
+      // Hint text
+      ctx.fillStyle = 'rgba(100, 100, 130, 0.9)';
+      ctx.font = `600 ${15 * scale}px sans-serif`;
       ctx.textAlign = 'center';
-      ctx.fillText('TAP TO CHOOSE PHOTO', fx + fw / 2, fy + fh / 2 + 160 * scale);
+      ctx.fillText('TAP TO CHOOSE PHOTO', fx + fw / 2, fy + fh / 2 + 175 * scale);
     }
     ctx.restore();
 
@@ -339,7 +344,8 @@ function CampaignEditContent() {
     ctx.restore();
 
     // 4. Draw badge header capsule
-    if (selectedTemplate || campaign.templateStyle === 'custom') {
+    const isCustom = campaign.templateStyle === 'custom' || !!selectedTemplate?.backgroundImage;
+    if (!isCustom && (selectedTemplate || campaign.templateStyle === 'custom')) {
       ctx.save();
       const badge = selectedTemplate ? selectedTemplate.badge : {
         text: 'CAMPAIGN TEAM',
@@ -419,7 +425,11 @@ function CampaignEditContent() {
       }
     ];
 
-    textElements.forEach(el => {
+    const filteredTextElements = isCustom
+      ? textElements.filter(el => el.type === 'name')
+      : textElements;
+
+    filteredTextElements.forEach(el => {
       ctx.save();
       ctx.fillStyle = el.textColor;
       ctx.textAlign = el.align;
